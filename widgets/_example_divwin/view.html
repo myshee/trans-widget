@@ -1,0 +1,149 @@
+<!-- 2017-7-30 20:18:14 | 修改 木遥（微信:  http://marsgis.cn/weixin.html ） -->
+<div class="testdivwin"> 
+    <div style="margin:5px">
+        <div>
+          <span>范围：</span>
+          <div class="radio radio-info radio-inline">
+            <input type="radio" id="queryContent1" name="queryContent" value="1" checked />
+            <label for="queryContent1">十进制</label>
+          </div>
+          <div class="radio radio-info radio-inline">
+            <input type="radio" id="queryContent2" name="queryContent" value="2" />
+            <label for="queryContent2">度分秒</label>
+          </div>
+          <div class="radio radio-info radio-inline">
+            <input type="radio" id="queryContent3" name="queryContent" value="3" />
+            <label for="queryContent3">2000平面坐标</label>
+          </div>
+        </div>
+        <form id="jwdForm" class="form-horizontal" autocomplete="off">
+          <div class="queryByA">
+              <div>
+                  <label>经度：</label>
+                  <input type="text" name="point_jd" id="point_jd" step="0.000001" oninput="change_jd()"/>
+              </div>
+              <div>
+                  <label>纬度：</label>
+                  <input type="text" name="point_wd" id="point_wd" step="0.000001" oninput="change_wd()"/>
+              </div>
+              <div>
+                  <label>高程：</label>
+                  <input type="text" name="point_height" id="point_height" step="0.1" autocomplete="off" 
+                  oninput="changeH('#point_height', '#point_height2', '#point_height3', '#point_height4')">
+              </div>
+          </div>
+        </form>
+        
+        <div class="queryByB" style="display: none;">
+            <div>
+                <label>经度：</label>
+                <input type="text" style=" width: 80px " name="du_jd" id="du_jd"  autocomplete="off" oninput="changedu_jd()"/><label>&nbsp;° </label>
+                <input type="text" style=" width: 80px " name="fen_jd" id="fen_jd"  autocomplete="off" oninput="changefen_jd()"/><label>&nbsp;′ </label>
+                <input type="text" style=" width: 80px " name="miao_jd" id="miao_jd"  autocomplete="off" oninput="changemiao_jd()"/><label>&nbsp;″ </label>
+            </div>
+            <div>
+                <label>纬度：</label>
+                <input type="text" style=" width: 80px " name="du_wd" id="du_wd" autocomplete="off" oninput="changedu_wd()"/><label>&nbsp;° </label>
+                <input type="text" style=" width: 80px " name="fen_wd" id="fen_wd" autocomplete="off" oninput="changefen_wd()"/><label>&nbsp;′ </label>
+                <input type="text" style=" width: 80px " name="miao_wd" id="miao_wd" autocomplete="off" oninput="changemiao_wd()"/><label>&nbsp;″ </label>
+            </div>
+            <div>
+                <label>高程：</label>
+                <input type="text" name="point_height2" id="point_height2" step="0.1" autocomplete="off" 
+                oninput="changeH('#point_height2', '#point_height', '#point_height3', '#point_height4')">
+            </div>
+        </div>
+        
+        <div class="queryByC" style="display: none;">
+          <div>
+              <span>分带：</span>
+              <div class="radio radio-info radio-inline">
+                  <input type="radio" id="dai1" name="queryContentlow" value="1" checked />
+                  <label for="dai1">三度带</label>
+              </div>
+               <div class="radio radio-info radio-inline">
+                  <input type="radio" id="dai2" name="queryContentlow" value="2" checked />
+                  <label for="dai2">六度带</label>
+              </div>
+          </div>
+          
+          <div class="sandu" style="display: none;">
+              <div>
+                  <label>纵坐标：</label>
+                  <input type="text" name="san_jd" id="san_jd" autocomplete="off" oninput="change_3jd()"/>
+              </div>
+              <div>
+                  <label>横坐标：</label>
+                  <input type="text" name="san_wd" id="san_wd" autocomplete="off" oninput="change_3wd()"/>
+              </div>
+              <div>
+                  <label>高度值：</label>
+                  <input type="text" name="point_height3" id="point_height3" step="0.1" autocomplete="off" 
+                  oninput="changeH('#point_height3', '#point_height', '#point_height2', '#point_height4')"/>
+              </div>
+          </div>
+          
+          <div class="liudu">
+              <div>
+                  <label>纵坐标：</label>
+                  <input type="text" name="liu_jd" id="liu_jd" autocomplete="off" oninput="change_6jd()"/>
+              </div>
+              <div>
+                  <label>横坐标：</label>
+                  <input type="text" name="liu_wd" id="liu_wd" autocomplete="off" oninput="change_6wd()"/>
+              </div>
+              <div>
+                  <label>高度值：</label>
+                  <input type="text" name="point_height4" id="point_height4" step="0.1"  autocomplete="off" 
+                  oninput="changeh('#point_height4', '#point_height', '#point_height2', '#point_height3')"/>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px; margin-bottom: 10px; text-align: center">
+        <input type="button" class="btn btn-primary" value="定位" id="removeAll"/>
+      </div>
+</div>
+
+<script type="text/javascript">
+    var selectType
+    $('input:radio[name="queryContent"]').change(function () {
+      selectType = $(this).val()
+
+      switch (selectType) {
+        default://十进制
+          $('.queryByA').show()
+          $('.queryByB').hide()
+          $('.queryByC').hide()
+          break
+        case '2': //度分秒
+          $('.queryByB').show()
+          $('.queryByA').hide()
+          $('.queryByC').hide()
+          break
+        case '3'://CGCS2000
+          $('.queryByA').hide()
+          $('.queryByB').hide()
+          $('.queryByC').show()
+          break
+      }
+    })
+
+    var selectType2
+    $('input:radio[name="queryContentlow"]').change(function () {
+      selectType2 = $(this).val()
+
+      switch (selectType2) {
+        default:
+          $('.sandu').show()
+          $('.liudu').hide()
+          break
+        case '2':
+          $('.sandu').hide()
+          $('.liudu').show()
+          break
+      }
+    })
+</script>
+
